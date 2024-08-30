@@ -1,0 +1,23 @@
+{
+  "name": "70080-pf",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/app.js"
+  },
+  "author": "Carolina Contreras",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-handlebars": "^8.0.1",
+    "mongoose": "^8.5.4",
+    "mongoose-paginate-v2": "^1.8.3",
+    "nanoid": "^5.0.7",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

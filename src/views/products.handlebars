@@ -1,0 +1,29 @@
+
+<div class="container">
+  <h1>Products List</h1>
+
+  <div class="card">
+    {{#each products}}
+    <div class="col-md-4">
+      <div class="card" style="width: 18rem;">
+        {{#if thumbnail}}
+        <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}">
+        {{/if}}
+        <div class="card-body">
+          <h5 class="card-title">{{title}}</h5>
+          <p class="card-text">{{description}}</p>
+          <p class="card-text">Price: ${{price}}</p>
+          <p class="card-text">Stock: {{stock}}</p>
+          <a href="#" class="btn btn-primary">Comprar</a>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  <div class="pagination">
+    <button id="prevPage" {{#unless hasPrevPage}}disabled{{/unless}}>Previous</button>
+    <span>Page {{currentPage}} of {{totalPages}}</span>
+    <button id="nextPage" {{#unless hasNextPage}}disabled{{/unless}}>Next</button>
+  </div>
+</div>
+<script src="/js/products.js"></script>
