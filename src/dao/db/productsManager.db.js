@@ -33,10 +33,28 @@ class ProductManager {
             throw error
         }
     }
-    
-    async getProducts () {
+    //SIN Paginate
+    // async getProducts () {
+    //     try {
+    //         return await ProductModel.find().lean()
+    //     } catch (error) {
+    //         console.log('Error getting products ')
+    //         throw error
+    //     }
+    // }
+    async getProducts ({ page = 1, limit = 10, sort = 1, category = null} = {}) {
         try {
-            return await ProductModel.find().lean()
+            const filter = {}
+            if(category){
+                filter,category = category
+            }
+            const options ={
+                page,
+                limit,
+                sort : {price: sort}
+            }
+            const result = await ProductModel.paginate(filter, options)
+            return result
         } catch (error) {
             console.log('Error getting products ')
             throw error

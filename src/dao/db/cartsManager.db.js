@@ -7,8 +7,7 @@ export class CartManager {
             await newCarts.save()
             return newCarts               
         } catch (error) {
-            console.log('Error creating carts') //luego borrar lo Log por cuestiones de rendimiento
-            throw error
+            throw new Error ('Error creating carts')
         }
     }
 
@@ -20,8 +19,7 @@ export class CartManager {
            }
            return findCarts
         } catch (error) {
-            console.log('Error to finding Id');
-            throw error
+            throw new Error('Error to finding Id')
         }
     }
 
@@ -39,31 +37,14 @@ export class CartManager {
             await cartsById.save()
             return cartsById
         } catch (error) {
-            console.log('Error adding products in cart');
-            throw error
+            throw new Error ('Error adding products in cart')
         }
     }
-    // async updateCart (id, updatedCart) {
-    //     try {
-    //         const cartById = await CartModel.findByIdAndUpdate(id, updatedCart)
-    //         if(!cartById){
-    //             //console.log('Cart not found');
-    //             return null
-    //         } 
-    //         //console.log('Cart Updated successfully');
-    //         return productById
-    //     } catch (error) {
-    //         console.log('Error updating carts')
-    //         throw error
-    //     }
-    // }
-   
     async deleteProducts(cartId, productId) {
         try {
             const cart = await CartModel.findById(cartId)
             if(!cart){
-                console.log('Cart not found');
-                return null
+                throw new Error('Cart not found')
             }
             const initialLength = cart.products.length;
             cart.products = cart.products.filter( p => p.product._id.toString() !== productId )
@@ -71,12 +52,57 @@ export class CartManager {
             await cart.save()
             return cart
             }else {
-                return { error: 'Product not found in cart' };
+                throw new Error('Product not found in cart')
             }
         } catch (error) {
-            //console.log('error deleting products in cart')
-            throw error
+            throw new Error ('error deleting products in cart')
         }
     }
+    async updateCart (id, updatedCart) {
+        try {
+            const cartsById = await CartModel.findById(id)
+            if(!cartsById){
+                throw new Error('Cart not found')
+            } 
+            cartsById.products = updatedCart
+            cartsById.markModified('products')
+            await cartsById.save()
+            return cartsById                       
+        } catch (error) {
+            throw new Error('Error updating carts')
+        }
+    }
+    async updateQttyCart (idCart, idProduct, qtty) {
+        try {
+            const cart = await CartModel.findById(idCart)
+            if(!cart){
+                throw new Error('Cart not found')
+            } 
+            const prodIndex = cart.products.findIndex(item=>item._id.toString()===idProduct)
+            if(prodIndex !== -1){
+                cart.products[prodIndex].quantity = qtty
+                cart.markModified('products')
+                await cart.save()
+                return cart          
+            } else {
+                throw new Error('Product not found in cart')
+            }             
+        } catch (error) {
+            throw new Error('Error updating quantity in carts')
+        }
+    }
+    async emptyCarts(cartId) {
+        try {
+            const cart = await CartModel.findById(cartId)
+            if(!cart){
+                throw new Error('Cart not found')
+            }
+            cart.products = []
+            await cart.save()
+            return cart                
+        } catch (error) {
+            throw new Error ('error emptying the cart')
+        }
+    }   
 }
 export default CartManager

@@ -21,9 +21,20 @@
     {{/each}}
   </div>
   <div class="pagination">
-    <button id="prevPage" {{#unless hasPrevPage}}disabled{{/unless}}>Previous</button>
+    {{#if prevLink}}
+    <a href="{{prevLink}}" class="btn btn-secondary">Previous</a>
+    {{else}}
+    <button class="btn btn-secondary" disabled>Previous</button>
+    {{/if}}
+  
     <span>Page {{currentPage}} of {{totalPages}}</span>
-    <button id="nextPage" {{#unless hasNextPage}}disabled{{/unless}}>Next</button>
+  
+    {{#if nextLink}}
+    <a href="{{nextLink}}" class="btn btn-secondary">Next</a>
+    {{else}}
+    <button class="btn btn-secondary" disabled>Next</button>
+    {{/if}}
   </div>
 </div>
+<script src="/socket.io/socket.io.js"></script>
 <script src="/js/products.js"></script>

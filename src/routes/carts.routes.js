@@ -65,40 +65,39 @@ router.delete('/:cid/products/:pid', async(req,res) => {
     }
 })
 
-//Actualiza todos los productos del carrito con un arreglo de productos
+//Actualiza todos los productos del carrito con un arreglo de productos. PUT localhost:8080/api/carts/66cd0eb48e443b64dd42a945
 router.put('/:cid', async(req,res) => {
-    // const id = req.params.cid
-    // const updateCart = req.body
-    // try {
-    //      res.status(200).send(await manager.updateCart(id, updateCart))
-    // } catch (error) {
-    //     res.status(500).send({ error: error.message, message:"PUT Error with cid" })
-    // }
+    const id = req.params.cid
+    const updateCart = req.body
+    try {
+         res.status(200).send(await manager.updateCart(id, updateCart))
+    } catch (error) {
+        res.status(500).send({ error: error.message, message:"PUT Error with cid" })
+    }
 })
 
-//Actualiza SOLO la cantidad de unidades del productos por cantidad enviada desde body
+//Actualiza SOLO la cantidad de unidades del productos por cantidad enviada desde body. PUT localhost:8080/api/carts/66cb395cca1e704691c337cd/product/66cb8d0bf053b724845f0165
 router.put('/:cid/products/:pid', async(req,res) => {
-    // const id = req.params.cid
-    // const updateCart = req.body
-    // try {
-    //      res.status(200).send(await manager.updateCart(id, updateCart))
-    // } catch (error) {
-    //     res.status(500).send({ error: error.message, message:"PUT Error with cid" })
-    // }
-})
-//eliminar TODOS los productos del carrito
-router.delete('/:cid/products/:pid', async(req,res) => {
+    const cid = req.params.cid
+    const pid = req.params.pid
+    const quantity = req.body
     try {
-        const result = await manager.deleteCart(req.params.cid)
+         res.status(200).send(await manager.updateQttyCart(cid, pid, quantity))
+    } catch (error) {
+        res.status(500).send({ error: error.message, message:"PUT Error with cid" })
+    }
+})
+//eliminar TODOS los productos del carrito DELETE localhost:8080/api/carts/66cd0eb48e443b64dd42a945
+router.delete('/:cid', async(req,res) => {
+    try {
+        const cart = await manager.emptyCarts(req.params.cid)
         if (cart){
-            cart.products = []
-            await manager.save()
             res.status(200).send('Cart empty')
         } else {
             res.status(404).send('Cart not found')
         }
     } catch (error) {
-        res.status(500).send({ error: error.message, message:"DEL Error All pid with cid" })
+        res.status(500).send({ error: error.message, message:"DEL Error emptying with cid" })
     }
 })
 export default router
