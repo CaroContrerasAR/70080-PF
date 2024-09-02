@@ -22,6 +22,9 @@ Asegúrate de tener MongoDB instalado y en ejecución. Configura la conexión a 
 1. inicia el servidor: npm run dev
 2. Accede a las vistas:
     . Lista de productos JSON: http://localhost:8080/api/products
+    . otras pruebas:    http://localhost:8080/api/products?limit=3&page=2
+                                http://localhost:8080/api/products?limit=3&page=2&sort=desc
+                                http://localhost:8080/api/products?query=Ca2
     . Ver carrito: http://localhost:8080/api/carts
     . Lista de productos: http://localhost:8080/products
     . Lista de productos: http://localhost:8080/home (PE2)

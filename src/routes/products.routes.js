@@ -4,17 +4,20 @@ import ProductManager from '../dao/db/productsManager.db.js'
 const router = Router()
 const manager = new ProductManager()
 
-//Product List & http://localhost:8080/api/product?limit=2
+// http://localhost:8080/api/products?limit=3&page=2
+// http://localhost:8080/api/products?limit=3&page=2&sort=desc
+//http://localhost:8080/api/products?query=Ca2
 router.get('/', async (req, res)=>{
-    const {limit} = req.query
     try {
-        const arrayProduct = await manager.getProducts()
-        if(limit){
-            res.status(200).send(arrayProduct.slice(0, limit))
-        } else {
-            res.status(200).send(arrayProduct)
-        }
-    }catch (error) {
+        const {limit=10, page=1, sort,query}= req.query
+        const product = await manager.getProducts({
+            limit:parseInt(limit),
+            page: parseInt(page),
+            sort,
+            query
+        })
+        res.json(product)
+    } catch (error) {
         res.status(500).send({ error : error.message, message:"GET Error"})
     }
 })

@@ -42,22 +42,49 @@ class ProductManager {
     //         throw error
     //     }
     // }
-    async getProducts ({ page = 1, limit = 10, sort = 1, category = null} = {}) {
+    async getProducts ({ page = 1, limit = 10, sort = 1, query}) {
         try {
-            const filter = {}
-            if(category){
-                filter,category = category
+            // Añade verificación de parámetros
+        if (typeof page !== 'number' || typeof limit !== 'number') {
+            throw new Error('Invalid parameters');
+        }
+            const skip = (page - 1) * limit
+            let filter={ }
+            let sortOption={ }
+            if(query){
+                filter.category = query
             }
-            const options ={
-                page,
-                limit,
-                sort : {price: sort}
+            if(sort){
+                if( sort === 'asc' || sort === 'desc' ) {
+                    sortOption.price = sort === 'asc' ? 1 : -1
+                }
             }
-            const result = await ProductModel.paginate(filter, options)
-            return result
+            const product=await ProductModel
+                .find(filter)
+                .sort(sortOption)
+                .skip(skip)
+                .limit(limit)
+                .lean()
+                const totalProducts=await ProductModel.countDocuments(filter)
+                const totalPages=Math.ceil(totalProducts/limit)
+                const hasPrevPage = page>1
+                const hasNextPage = page<totalPages
+                
+                return {
+                    docs: product,
+                    totalPages,
+                    prevPage: hasPrevPage ? page - 1 : null,
+                    nextPage: hasNextPage ? page + 1 : null,
+                    page,
+                    hasPrevPage,
+                    hasNextPage,
+                    prevLink: hasPrevPage ? `/api/products?limit=${limit}&page=${page - 1}&sort=${sort}&query=${query}` : null,
+                    nextLink: hasNextPage ? `/api/products?limit=${limit}&page=${page + 1}&sort=${sort}&query=${query}` : null,
+                };
+            //const result = await ProductModel.paginate(filter, options)
+            //return result
         } catch (error) {
-            console.log('Error getting products ')
-            throw error
+            throw new Error ('Error getting products: ' + error.message)
         }
     }
 

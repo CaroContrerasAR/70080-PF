@@ -35,13 +35,16 @@ router.get('/products', async (req, res) => {
     //     res.status(500).send({ error: error.message })
     // }
     try {
-        const limit= parseInt( req.query.limit ) || 10
-        const page=parseInt( req.query.page ) || 1
-        const sort = req.query.sort === 'asc' ? 1 : req.query.sort === 'desc' ? -1 : undefined
-        const category = req.query.category || null
+        const limit= parseInt( req.query.limit,10 ) || 10
+        const page=parseInt( req.query.page, 10 ) || 1
+        const sort = req.query.sort === 'asc' ? 'asc' : req.query.sort === 'desc' ? 'desc' : undefined
+        const query = req.query.category || null
 
+        console.log('Params:', {page, limit, sort, query});
         //obtener los productos con paginacion
-        const products = await manager.getProducts({page, limit, sort, category})
+        const products = await manager.getProducts({page, limit, sort, query})
+        
+        //console.log('Products returned:', products);
         const totalProducts= products.totalDocs
         const totalPages = products.totalPages
         //determinar pagina previa y siguiente
@@ -49,24 +52,25 @@ router.get('/products', async (req, res) => {
         const nextPage = page < totalPages ? page + 1 : null
     
         const productsFinal = products.docs.map( prod=>{
-            const {_id, ...rest}= prod.toObject()
+            const {_id, ...rest}= prod//.toObject()
             return rest
         })
-
         res.render("products", {title:'Products',
             status:'success',
             products:productsFinal,
             currentPage: products.page,
-            totalPages:products.totalPages,
+            totalPages,
             hasPrevPage:products.hasPrevPage,
             hasNextPage:products.hasNextPage,
-            prevPage: products.hasPrevPage ? products.page - 1 : null,
-            nextPage: products.hasNextPage ? products.page + 1 : null,
-            prevLink: products.hasPrevPage ? `/products?limit=${limit}&page=${products.page - 1}`: null,
-            nextLink: products.hasNextPage ? `/products?limit=${limit}&page=${products.page + 1}`: null,
+            prevPage,//: products.hasPrevPage ? products.page - 1 : null,
+            nextPage,//: products.hasNextPage ? products.page + 1 : null,
+            prevLink: products.hasPrevPage ? `/products?limit=${limit}&page=${page - 1}`: null,
+            nextLink: products.hasNextPage ? `/products?limit=${limit}&page=${page + 1}`: null,
+            //prevLink: products.hasPrevPage ? `/products?limit=${limit}&page=${page - 1}&sort=${sort}&query=${query}` : null,
+            //nextLink: products.hasNextPage ? `/products?limit=${limit}&page=${page + 1}&sort=${sort}&query=${query}` : null,
         })
     } catch (error) {
-        res.status(500).render({status:'error', error: error.message })
+        res.status(500).send({status:'error', error: error.message })
     }
 })
 
