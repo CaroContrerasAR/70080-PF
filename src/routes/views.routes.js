@@ -40,7 +40,7 @@ router.get('/products', async (req, res) => {
         const sort = req.query.sort === 'asc' ? 'asc' : req.query.sort === 'desc' ? 'desc' : undefined
         const query = req.query.category || null
 
-        console.log('Params:', {page, limit, sort, query});
+        //console.log('Params:', {page, limit, sort, query});
         //obtener los productos con paginacion
         const products = await manager.getProducts({page, limit, sort, query})
         

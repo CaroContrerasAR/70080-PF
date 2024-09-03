@@ -42,10 +42,10 @@ class ProductManager {
     //         throw error
     //     }
     // }
-    async getProducts ({ page = 1, limit = 10, sort = 1, query}) {
+    async getProducts ({ page = 1, limit = 10, sort = 1, query}={}) {
         try {
             // Añade verificación de parámetros
-        if (typeof page !== 'number' || typeof limit !== 'number') {
+            if (typeof page !== 'number' || typeof limit !== 'number' || page <= 0 || limit <= 0) {
             throw new Error('Invalid parameters');
         }
             const skip = (page - 1) * limit
@@ -81,8 +81,6 @@ class ProductManager {
                     prevLink: hasPrevPage ? `/api/products?limit=${limit}&page=${page - 1}&sort=${sort}&query=${query}` : null,
                     nextLink: hasNextPage ? `/api/products?limit=${limit}&page=${page + 1}&sort=${sort}&query=${query}` : null,
                 };
-            //const result = await ProductModel.paginate(filter, options)
-            //return result
         } catch (error) {
             throw new Error ('Error getting products: ' + error.message)
         }
