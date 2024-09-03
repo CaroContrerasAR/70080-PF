@@ -21,15 +21,15 @@ Asegúrate de tener MongoDB instalado y en ejecución. Configura la conexión a 
 ## Uso
 1. inicia el servidor: npm run dev
 2. Accede a las vistas:
-    . Lista de productos JSON: http://localhost:8080/api/products
-    . Lista de carritos JSON con Populate: http://localhost:8080/api/carts
-    . otras pruebas:    http://localhost:8080/api/products?limit=3&page=2
-                                http://localhost:8080/api/products?limit=3&page=2&sort=desc
-                                http://localhost:8080/api/products?query=Ca2
-    . Lista de productos con Paginación: http://localhost:8080/products
-    . Lista de un carrito por Id: http://localhost:8080/carts/66cb395cca1e704691c337cd
-    . Lista de productos: http://localhost:8080/home (PE2)
-    . Productos en tiempo real: http://localhost:8080/realtimeproducts (PE2)
+    - Lista de productos JSON: http://localhost:8080/api/products
+    - Lista de carritos JSON con Populate: http://localhost:8080/api/carts
+    - otras pruebas:    http://localhost:8080/api/products?limit=3&page=2
+                                 http://localhost:8080/api/products?limit=3&page=2&sort=desc
+                                 http://localhost:8080/api/products?query=Ca2
+    - Lista de productos con Paginación: http://localhost:8080/products
+    - Lista de un carrito por Id: http://localhost:8080/carts/66cb395cca1e704691c337cd
+    - Lista de productos: http://localhost:8080/home (PE2)
+    - Productos en tiempo real: http://localhost:8080/realtimeproducts (PE2)
 
 ## Licencia
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para obtener más información.
