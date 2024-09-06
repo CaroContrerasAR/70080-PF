@@ -22,7 +22,7 @@ socket.on('products', (data) => {
                                     <p>
                                       <img style="height: 18px;" src="${e.thumbnail}" alt="${e.title}">
                                     </p>
-                                      <button type="button" class="btn btn-danger btn-sm btnBuy" data-id="${e._id}">Comprar</button>
+                                      <button type="button" class="btn btn-danger btn-sm btnBuy" data-id="${e._id}">Agregar al Carrito</button>
                               `
         containerProducts.appendChild(card)
 
