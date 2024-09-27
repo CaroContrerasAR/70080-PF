@@ -1,12 +1,18 @@
 import express from 'express'
-import mongoose from 'mongoose'
+//import mongoose from 'mongoose'
 import { engine } from 'express-handlebars'
 import { Server } from "socket.io"
-
+import cookieParser from 'cookie-parser'
+import session from 'express-session'
+import MongoStore from 'connect-mongo'
+import passport from 'passport'
 import './db.js'
 import productRouter from './routes/products.routes.js'
 import cartRouter from './routes/carts.routes.js'
 import viewsRouter from './routes/views.routes.js'
+import sessionRouter from './routes/views.routes.js'
+import initializePassport from './config/passport.config.js'
+
 
 //fs
 //import ProductManager from './dao/fs/conproductsManager.controller.js'
@@ -24,22 +30,35 @@ app.set("views", "./src/views")
 
 //Midlewares
 app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 app.use(express.static("./src/public"))
-app.use(express.static("./src/public"))
+app.use(cookieParser())
+app.use(session({
+    secret: 'secretCoder',
+    resave: true,
+    saveUninitialized: true,
+    store: MongoStore.create({
+        mongoUrl: 'mongodb+srv://acccarolina:qSDoqtjEi0cl76v2@cluster0.5cwsly0.mongodb.net/Sessiones?retryWrites=true&w=majority&appName=Cluster0',
+        ttl: 15
+    })
+}))
 
 //Rutas
+app.get('/',(req,res)=>{
+        res.send(`<h1>PE Backend II - Carolina Contreras</h1>`)
+})
+
+//cambios con passport
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
+app.use('/api/sessions', sessionRouter)
 app.use('/', viewsRouter)
 
 
-app.get('/',(req,res)=>{
-        res.send(`<h1>PF Backend I - Carolina Contreras</h1>`)
-})
-    
-// app.get('/', (req,res)=>{
-//     res.render("home")
-// })
     
 //Listen
 const httpServer = app.listen(PORT, () => {

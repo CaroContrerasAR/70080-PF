@@ -87,4 +87,26 @@ router.get('/carts/:id', async (req, res) => {
     }
 })
 
+router.get('/register', (req,res)=>{
+    if(req.session.login){
+        return res.redirect('/profile')
+    }
+    res.render('registro')
+})
+
+router.get('/login', (req,res)=>{
+    if(req.session.login){
+        return res.redirect('/profile')
+    }
+    res.render('login')
+})
+
+router.get('/profile', (req,res)=>{
+    //si no esta logueado:
+    if(!req.session.login){
+        return res.redirect('/login')
+    }
+    res.render('perfil', {user: req.session.user})
+})
+
 export default router
